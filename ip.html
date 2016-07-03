@@ -1,0 +1,125 @@
+<head>
+  <title>Mood Playlist Builder</title>
+</head>
+
+<body>    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+       <div class="navbar-inner">
+         <div class="container">
+           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="brand" href="#">Playlist Mood Builder</a>
+           <div class="nav-collapse collapse">
+             <ul class="nav">
+               <li><a id="search" href="">Search</a></li>
+                {{#if currentUser}}
+                <li><a id="playlist" href="">Playlist</a></li>
+                {{/if}}
+               <li><a id="about" href="">About</a></li>
+                 <li><a>{{>loginButtons}}</a></li>
+             </ul>
+           </div><!--/.nav-collapse -->
+         </div>
+       </div>
+     </div>
+     <div class="container">
+         {{#unless showingPlaylist}}
+         {{#unless showingAbout}}
+         {{#unless showingSearch}}
+         {{#unless currentUser}}
+       <h1>Login to continue</h1>
+         {{/unless}}
+         
+         {{#if currentUser}}
+         <h1>Thanks for logging in!</h1>
+         {{/if}}
+         {{/unless}}
+         {{/unless}}
+         {{/unless}}
+    </div>
+    
+    {{#if showingSearch}}
+        {{>search}}
+        {{>songs}}
+    {{/if}}
+    
+    {{#if showingAbout}}
+        {{>about}}
+    {{/if}}
+    
+    {{#if showingPlaylist}}
+        {{>playlist}}
+    {{/if}}
+</body>
+
+<template name="search">
+    <form>
+        <input id="searchBox" type="text" name="searchPhrase" placeholder="I'm feeling...">
+        <input id="searchButton" class="button" type="submit" value="Search">
+    </form>
+</template>
+
+<template name="about">
+    <h4>Welcome to Mood Playlist!</h4>
+    <h5>List of Moods:</h5>
+    
+    {{#each moods}}
+    <p>{{name}}</p>
+    {{/each}}
+    
+</template>
+
+<template name="songs">
+    <table id="songTable">
+    {{#if searching}}
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+          {{#if currentUser}}
+          <th>Add to Playlist</th>
+          {{/if}}
+      </tr>
+    {{/if}}
+
+    {{#each songList}}
+      <tr>
+        <td>{{title}}</td>
+        <td>{{artist_name}}</td>
+          {{#if currentUser}}
+        <td><input class="songCheckbox" type="checkbox" value="{{title}},{{artist_name}}"></td>
+          {{/if}}
+      </tr>
+    {{/each}}
+        
+    </table>
+    
+    
+    {{#if currentUser}}
+    <br>
+    <input id="addPlaylist" class="button" type="submit" value="Add to Playlist">
+    {{/if}}
+
+</template>
+
+<template name="playlist">
+    <h1>Playlist!</h1>
+    <table id="playlistTable">
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Remove Song</th>
+    {{#each addedSongList}}
+        <tr>
+            <td>{{song}}</td>
+            <td>{{artist}}</td>
+            <td><input class="removeSong" type="checkbox" value="{{song}},{{artist}}"></td>
+        </tr>
+    {{/each}}
+
+        </table>
+        <br>
+    <input id="removePlaylist" class="button" type="submit" value="Remove from Playlist">
+    
+</template>
